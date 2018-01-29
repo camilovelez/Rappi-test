@@ -1,0 +1,45 @@
+pushMessage='Tu servicio ha sido confirmado!';
+
+public function post_confirm(){
+    $id = Input::get('service_id');
+    $service = Service::find($id);
+    if($service != NULL){
+        if($service->status_id=='6'){
+            return Response::json(array('error'=>'2'));
+        }    
+        if($service->driver_id == NULL && $service->status_id == '1'){
+            update_db($service, $id);
+            $push = Push::make();
+            if(service->user->uuid != ''){
+                if(service->user->type == '1'){
+                    $push->ios(service->user->uuid, pushMessage, 1, 'honk.wav', 'Open', array('service_id'=>service->id));
+                }
+                else{
+                    $push->android2(service->user->uuid, pushMessage, 1, 'default', 'Open', array('service_id'=>service->id));
+                }
+            }
+            
+            return Response::json(array('error' =>'0'));
+        }
+        else{
+            return Response::json(array('error' =>'1'));
+        }
+    }
+    else{
+        return Response::json(array('error' =>'3'));
+    }
+}
+
+public function update_db(service, id){
+    service = Service::update(id, array(
+        'driver_id' => Input::get('driver_id),
+        'status_id' => '2'
+    ));
+    Driver::update(Input::get('driver_id'),array(
+        'available' => '0'
+    ));
+    $driverTmp = Driver::find(Input::get('driver_id'));
+    Service::update(id,array(
+        'car_id' => $driverTmp->car_id
+    ));
+}
