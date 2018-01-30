@@ -5,7 +5,7 @@ UPDATE_COMMAND='UPDATE'
 QUERY_COMMAND='QUERY'
 
 def operate_cube(request):
-    STDIN = request.POST['input'].split() #split string into a list
+    STDIN = request.POST['input'].split()
     T=int(STDIN[0])
     i=1
     error=''
@@ -32,7 +32,7 @@ def operate_cube(request):
                 x2,y2,z2=int(STDIN[i+4]),int(STDIN[i+5]),int(STDIN[i+6])
                 if(max(x2,y2,z2)<=N):
                     STDOUT.append(query_cube(inputs_list,x1, y1, z1,x2,y2,z2))
-                    ''' STDOUT.append(query_cube(cube,x1, y1, z1,x2,y2,z2)) '''
+                    # STDOUT.append(query_cube(cube,x1, y1, z1,x2,y2,z2))
                     i+=7
                 else:
                     error='At least of one your inputs is bigger than the size of the cube'
@@ -52,10 +52,10 @@ def query_cube(inputs_list,x1, y1, z1,x2,y2,z2):
             query_sum+=inp[3]
     return query_sum
 
-''' def query_cube(cube,x1, y1, z1,x2,y2,z2):
-    query_sum=0
-    for i in range(x1-1,x2):
-        for j in range(y1-1,y2):
-            for k in range(y1-1,y2):
-                query_sum+=cube[i][j][k]
-    return query_sum '''
+# def query_cube(cube,x1, y1, z1,x2,y2,z2):
+#     query_sum=0
+#     for i in range(x1-1,x2):
+#         for j in range(y1-1,y2):
+#             for k in range(y1-1,y2):
+#                 query_sum+=cube[i][j][k]
+#     return query_sum
