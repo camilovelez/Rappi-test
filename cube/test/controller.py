@@ -11,6 +11,7 @@ def operate_cube(request):
     error=''
     STDOUT=list()
     for t in range(T):
+        inputs_list=list()
         N=int(STDIN[i])
         cube=[[[0 for z in range(N)] for y in range(N)] for x in range(N)]
         M=int(STDIN[i+1])
@@ -19,6 +20,7 @@ def operate_cube(request):
             if(STDIN[i]==UPDATE_COMMAND):
                 x,y,z,W=int(STDIN[i+1]),int(STDIN[i+2]),int(STDIN[i+3]),int(STDIN[i+4])
                 if(max(x,y,z)<=N):
+                    inputs_list.append([x,y,z,W])
                     cube[x-1][y-1][z-1]=W
                     i+=5
                 else:
@@ -29,7 +31,8 @@ def operate_cube(request):
                 x1,y1,z1=int(STDIN[i+1]),int(STDIN[i+2]),int(STDIN[i+3])
                 x2,y2,z2=int(STDIN[i+4]),int(STDIN[i+5]),int(STDIN[i+6])
                 if(max(x2,y2,z2)<=N):
-                    STDOUT.append(query_cube(cube,x1, y1, z1,x2,y2,z2))
+                    STDOUT.append(query_cube(inputs_list,x1, y1, z1,x2,y2,z2))
+                    ''' STDOUT.append(query_cube(cube,x1, y1, z1,x2,y2,z2)) '''
                     i+=7
                 else:
                     error='At least of one your inputs is bigger than the size of the cube'
@@ -42,10 +45,17 @@ def operate_cube(request):
 
     return JsonResponse(STDOUT, safe=False)
 
-def query_cube(cube,x1, y1, z1,x2,y2,z2):
+def query_cube(inputs_list,x1, y1, z1,x2,y2,z2):
+    query_sum=0
+    for inp in inputs_list:
+        if (inp[0]<=x2 and inp[0]>=x1 and inp[1]<=y2 and inp[1]>=y1 and inp[2]<=z2 and inp[2]>=z1):
+            query_sum+=inp[3]
+    return query_sum
+
+''' def query_cube(cube,x1, y1, z1,x2,y2,z2):
     query_sum=0
     for i in range(x1-1,x2):
         for j in range(y1-1,y2):
             for k in range(y1-1,y2):
                 query_sum+=cube[i][j][k]
-    return query_sum
+    return query_sum '''
